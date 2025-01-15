@@ -1,45 +1,48 @@
-package service;
+package rhodric.service;
 
-import enums.Direction;
-import model.Player;
-import service.structure.*;
-
+import rhodric.enums.Direction;
+import rhodric.enums.SpecificPosition;
+import rhodric.model.Player;
+import rhodric.service.structure.Role;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Court {
-  private ArrayList<Quadrant> currLineup;
+  private ArrayList<Role> currLineup;
   private ArrayList<Player> frontRow;
   private ArrayList<Player> backRow;
-  public Court(){
-    currLineup = new ArrayList<Quadrant>();
-    frontRow = new ArrayList<Player>();
-    backRow = new ArrayList<Player>();
+  private List<SpecificPosition> listOfPositions;
+  private boolean liberoIsIn;
+  Roster roster;
+
+  public Court(Roster roster){
+    currLineup = new ArrayList<>();
+    frontRow = new ArrayList<>();
+    backRow = new ArrayList<>();
+    listOfPositions = new ArrayList<>(List.of(SpecificPosition.SETTER,SpecificPosition.OUTSIDE1,SpecificPosition.MIDDLE1,SpecificPosition.OPPOSITE,SpecificPosition.OUTSIDE2,SpecificPosition.MIDDLE2));
+    liberoIsIn = false;
+    this.roster = roster;
   }
 
-  public void setLineup(List<Player> orderedLineup){
-    currLineup.add(new Setter(orderedLineup.get(0)));
-    currLineup.add(new OH1(orderedLineup.get(1)));
-    currLineup.add(new MID1(orderedLineup.get(2)));
-    currLineup.add(new OPP(orderedLineup.get(3)));
-    currLineup.add(new OH2(orderedLineup.get(4)));
-    currLineup.add(new MID2(orderedLineup.get(5)));
-
-    frontRow.add(orderedLineup.get(1));
-    frontRow.add(orderedLineup.get(2));
-    frontRow.add(orderedLineup.get(3));
-
-    backRow.add(orderedLineup.get(0));
-    backRow.add(orderedLineup.get(4));
-    backRow.add(orderedLineup.get(5));
+  //HELP ME I'M BROKEN
+  public void setLineup(List<Integer> orderedLineup){
+    for (int i = 0; i < 6; i++){
+      currLineup.add(new Role(roster.getPlayer(orderedLineup.get(i)), i+1, listOfPositions.get(i)));
+      if (i > 0 && i < 4){
+        frontRow.add(roster.getPlayer(orderedLineup.get(i)));
+      }
+      else{
+        backRow.add(roster.getPlayer(orderedLineup.get(i)));
+      }
+    }
   }
 
   public void showCourt(){
     Player one,two,three,four,five,six;
     one = two = three = four = five = six = new Player("", -1);
     for (int i = 0; i < currLineup.size(); i++){
-      switch(currLineup.get(i).getCourtPos()){
+      switch(currLineup.get(i).getRotationPos()){
         case 1:
           one = currLineup.get(i).getPlayer();
           break;
@@ -74,11 +77,20 @@ public class Court {
 
   public Player getPlayer(Integer courtPos){
     for (int i = 0; i < currLineup.size(); i++){
-      if (courtPos == currLineup.get(i).getCourtPos()){
+      if (courtPos == currLineup.get(i).getRotationPos()){
         return currLineup.get(i).getPlayer();
       }
     }
     return null;
+  }
+
+  public void sub(Player subIn, Integer courtPos){
+    for (int i = 1; i <= currLineup.size(); i++) {
+      int currPos = currLineup.get(i).getRotationPos();
+      if (currPos == courtPos){
+        currLineup.get(i).setPlayer(subIn);
+      }
+    }
   }
 
   public void rotate(Direction direction){
@@ -86,7 +98,7 @@ public class Court {
     ArrayList<Player> newBack = new ArrayList<>();
     for (int i = 0; i < currLineup.size(); i++){
       currLineup.get(i).rotate(direction);
-      if (currLineup.get(i).getCourtPos() >= 2 && currLineup.get(i).getCourtPos() <= 4){
+      if (currLineup.get(i).getRotationPos() >= 2 && currLineup.get(i).getRotationPos() <= 4){
         newFront.add(currLineup.get(i).getPlayer());
       }
       else{

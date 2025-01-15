@@ -1,4 +1,4 @@
-package enums;
+package rhodric.enums;
 
 public enum Direction {
   FORWARD,

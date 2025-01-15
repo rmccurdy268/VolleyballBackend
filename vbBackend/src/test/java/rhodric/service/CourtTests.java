@@ -1,9 +1,8 @@
-package service;
-
-import enums.Direction;
-import model.Player;
+package rhodric.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import rhodric.enums.Direction;
+import rhodric.model.Player;
 
 import java.util.ArrayList;
 

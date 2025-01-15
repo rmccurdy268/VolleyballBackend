@@ -1,6 +1,6 @@
-package service;
+package rhodric.service;
 
-import model.Player;
+import rhodric.model.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +24,12 @@ public class Roster {
   public void addLineup(String name, List<Integer> lineup){
      lineups.put(name, lineup);
   }
+
+  /*
+  public Player getPlayer(Integer id){
+    playerDao.getPlayer(id);
+  }
+   */
 
   public List<Integer> getLineup(String name){
     return lineups.get(name);

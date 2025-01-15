@@ -1,6 +1,6 @@
-package model;
+package rhodric.model;
 
-import enums.Position;
+import rhodric.enums.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,8 +39,8 @@ public class Player {
     return this.positions;
   }
   public Integer getId(){return this.id;}
-  // Defense ratings
 
+  // Defense ratings
   public void setPassRating(Integer rating){
     this.passRating = rating;
   }
