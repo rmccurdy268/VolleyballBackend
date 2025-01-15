@@ -20,7 +20,7 @@ jobs:
 
       - name: Clean
         run: |
-          cd VolleyballBackend
+          ls -al
           mvn -ntp clean
       - name: Build
         run: mvn -ntp compile
